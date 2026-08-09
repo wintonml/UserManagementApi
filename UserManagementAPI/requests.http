@@ -1,0 +1,30 @@
+### Get all users
+GET http://localhost:5140/api/users
+Accept: application/json
+
+### Get a user by id
+GET http://localhost:5140/api/users/{{userId}}
+Accept: application/json
+
+### Create a new user
+POST http://localhost:5140/api/users
+Content-Type: application/json
+
+{
+  "firstName": "Jane",
+  "lastName": "Doe",
+  "email": "jane.doe@example.com"
+}
+
+### Update an existing user
+PUT http://localhost:5140/api/users/{{userId}}
+Content-Type: application/json
+
+{
+  "firstName": "Jane",
+  "lastName": "Smith",
+  "email": "jane.smith@example.com"
+}
+
+### Delete a user
+DELETE http://localhost:5140/api/users/{{userId}}
