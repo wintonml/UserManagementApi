@@ -1,1 +1,2 @@
 # UserManagementApi
+Assignment for Coursera
