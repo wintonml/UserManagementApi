@@ -1,30 +1,50 @@
 ### Get all users
 GET http://localhost:5140/api/users
 Accept: application/json
+Authorization: Bearer dev-token
 
 ### Get a user by id
-GET http://localhost:5140/api/users/{078aa6cb-c593-44ad-99f1-e8c1e9c8314e}
+GET http://localhost:5140/api/users/{a393bc64-53e6-4710-bbe9-3602066bb3b1}
 Accept: application/json
+Authorization: Bearer dev-token
 
 ### Create a new user
 POST http://localhost:5140/api/users
 Content-Type: application/json
-
-{
-  "firstName": "John",
-  "lastName": "Doe",
-  "email": "john.doe@example.com"
-}
-
-### Update an existing user
-PUT http://localhost:5140/api/users/{123}
-Content-Type: application/json
+Authorization: Bearer dev-token
 
 {
   "firstName": "Jane",
+  "lastName": "Doe",
+  "email": "jane.doe@example.com"
+}
+
+### Update an existing user
+PUT http://localhost:5140/api/users/{a393bc64-53e6-4710-bbe9-3602066bb3b1}
+Content-Type: application/json
+Authorization: Bearer dev-token
+
+{
+  "firstName": "Janet",
   "lastName": "Smith",
-  "email": "jane.smith@example.com"
+  "email": "janet.smith@example.com"
 }
 
 ### Delete a user
-DELETE http://localhost:5140/api/users/{078aa6cb-c593-44ad-99f1-e8c1e9c8314e}
+DELETE http://localhost:5140/api/users/{a393bc64-53e6-4710-bbe9-3602066bb3b1}
+Authorization: Bearer dev-token
+
+### Test exception handling
+GET http://localhost:5140/api/test/throw
+Authorization: Bearer dev-token
+
+### Test authentication
+GET http://localhost:5140/api/users
+Authorization: Bearer dev-token
+
+### Test authentication with invalid token
+GET http://localhost:5140/api/users
+Authorization: Bearer bad-token
+
+### Test authentication with missing token
+GET http://localhost:5140/api/users

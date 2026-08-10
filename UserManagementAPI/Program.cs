@@ -3,7 +3,7 @@ using UserManagementAPI.Repositories;
 using UserManagementAPI.Validation;
 using UserManagementAPI.Middleware;
 
-const string apiRoute = "/api/users"; 
+const string apiRoute = "/api/users";
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,28 +12,25 @@ builder.Services.AddSingleton<IUserRepository, InMemoryUserRepository>();
 
 var app = builder.Build();
 
-app.UseExceptionHandler(errorApp =>
-{
-    errorApp.Run(async context =>
-    {
-        var problem = Results.Problem(
-            detail: "An unexpected error occurred while processing your request.",
-            statusCode: StatusCodes.Status500InternalServerError,
-            title: "Unexpected error"
-        );
-
-        context.Response.ContentType = "application/problem+json";
-        await context.Response.WriteAsJsonAsync(problem);
-    });
-});
-
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
+// Assignment-mandated middleware order:
+// 1. Error handling
+// 2. Authentication
+// 3. Logging
+// Ideally logging would be the first middleware,
+// but since we are logging the user id,
+// we need to authenticate first.
+// In a real-world application,
+// we would log the request id and correlate it with
+// the user id in a later step.
+app.UseMiddleware<ExceptionHandlingMiddleware>();
+app.UseMiddleware<AuthenticationMiddleware>();
 app.UseMiddleware<AuditMiddleware>();
+app.UseHttpsRedirection();
 
 app.MapGet(apiRoute, async (IUserRepository repository) =>
 {
@@ -73,5 +70,10 @@ app.MapDelete($"{apiRoute}/{{id:guid}}", async (Guid id, IUserRepository reposit
     return deleted ? Results.NoContent() : Results.NotFound();
 })
 .WithName("DeleteUser");
+
+app.MapGet("/api/test/throw", () =>
+{
+    throw new Exception("test");
+});
 
 app.Run();
