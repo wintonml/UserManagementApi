@@ -51,7 +51,7 @@ app.MapPost(apiRoute, async (CreateUserRequest user, IUserRepository repository)
 {
     var errors = ValidateUser.ValidateUserInput(user);
     if (errors.Count > 0)
-        return Results.BadRequest(errors);
+        return Results.ValidationProblem(errors);
 
     var createdUser = await repository.CreateAsync(user);
     return Results.Created($"/api/users/{createdUser.Id}", createdUser);
