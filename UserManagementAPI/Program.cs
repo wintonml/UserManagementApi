@@ -1,6 +1,7 @@
 using UserManagementAPI.Models;
 using UserManagementAPI.Repositories;
 using UserManagementAPI.Validation;
+using UserManagementAPI.Middleware;
 
 const string apiRoute = "/api/users"; 
 
@@ -32,6 +33,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseMiddleware<AuditMiddleware>();
 
 app.MapGet(apiRoute, async (IUserRepository repository) =>
 {
